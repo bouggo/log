@@ -1,3 +1,3 @@
-module github.com/fobilow/log
+module github.com/bouggo/log
 
 go 1.14
