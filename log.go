@@ -9,35 +9,35 @@ import (
 )
 
 var logger *golog.Logger
-var verbosity LogLevel
+var verbosity Level
 var verbositySet bool
 
-//LogLevel is used to set verbosity of GitDB
-type LogLevel int
+//Level is used to set verbosity of your app
+type Level int
 
 const (
 	//LogLevelNone - log nothing
-	LogLevelNone LogLevel = iota
+	LevelNone Level = iota
 	//LogLevelError - logs only errors
-	LogLevelError
+	LevelError
 	//LogLevelWarning  - logs warning and errors
-	LogLevelWarning
+	LevelWarning
 	//LogLevelTest - logs only debug messages
-	LogLevelTest
+	LevelTest
 	//LogLevelInfo - logs info, warining and errors
-	LogLevelInfo
+	LevelInfo
 )
 
 //getVerbosity defaults verbosity to LogLevelWarning if a verbosity is not set
-func getVerbosity() LogLevel {
+func getVerbosity() Level {
 	if !verbositySet {
-		return LogLevelWarning
+		return LevelWarning
 	}
 	return verbosity
 }
 
 //SetLogLevel sets log level
-func SetLogLevel(l LogLevel) {
+func SetLogLevel(l Level) {
 	verbosity = l
 	verbositySet = true
 }
@@ -55,28 +55,32 @@ func printlog(message string) {
 	}
 }
 
-func Log(message string) {
-	if getVerbosity() >= LogLevelInfo {
+//Info prints out informational messages
+func Info(message string) {
+	if getVerbosity() >= LevelInfo {
 		printlog(message)
 	}
 }
 
-func LogError(message string) {
-	if getVerbosity() >= LogLevelError {
+//Error prints out error messages
+func Error(message string) {
+	if getVerbosity() >= LevelError {
 		_, fn, line, _ := runtime.Caller(1)
 		printlog(fmt.Sprintf("ERROR: %s (%s:%d)", message, filepath.Base(fn), line))
 	}
 }
 
-func LogWarning(message string) {
-	if getVerbosity() >= LogLevelWarning {
+//Warn prints out warning messages
+func Warn(message string) {
+	if getVerbosity() >= LevelWarning {
 		_, fn, line, _ := runtime.Caller(1)
 		printlog(fmt.Sprintf("WARNING: %s (%s:%d)", message, filepath.Base(fn), line))
 	}
 }
 
-func LogTest(message string) {
-	if getVerbosity() == LogLevelTest {
+//Test prints out debugging or test messages
+func Test(message string) {
+	if getVerbosity() == LevelTest {
 		_, fn, line, _ := runtime.Caller(1)
 		printlog(fmt.Sprintf("DEBUG: %s (%s:%d)", message, filepath.Base(fn), line))
 	}
